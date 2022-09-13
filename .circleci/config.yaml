@@ -1,0 +1,32 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+
+jobs:
+  install-packages:
+    docker:
+      - image: cimg/node:18.8.0
+    resource_class: medium
+    steps:
+      - checkout
+      - run: pwd
+      - run: ls -la
+      - run: printenv
+      - run: node -v
+      - run: npm -v
+      - node/install-packages
+          # override-ci-command: npm install --loglevel verbose
+          # with-cache: true
+          # cache-path: ~/.npm
+      - run: ls -la
+      # - run: ls -la node_modules
+      # - run: ls -la /home/circleci/.npm
+      # - persist_to_workspace:
+      #     root: ~/project
+      #     paths: .
+
+workflows:
+  build:
+    jobs:
+      - install-packages
